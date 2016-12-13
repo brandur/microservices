@@ -46,11 +46,11 @@ Speed is important and microservice architectures can introduce latency as more 
 
 This is especially crucial for secure connections which have traditionally required three round trips to construct, adding a lot of additional latency (although TLS 1.3 is likely to bring this down to one round trip).
 
-## Consistent Is King
+## Consistency Is King
 
 Services being deployed separately shouldn't mean that each one should be its own special snowflake.
 
-The more consistent the technology stack and pratices between all shared services, the lower the overhead to development and operations will be, and the easier it'll be for engineers to move between services and continue to maintain high levels of productivity. For example:
+The more consistent the technology stack and practices between all shared services, the lower the overhead to development and operations will be, and the easier it'll be for engineers to move between services and continue to maintain high levels of productivity. For example:
 
 * A single protocol should be shared for all communication between services (e.g. HTTP, GRPC, ...).
 * It takes a lot of experience to learn how to operate a database well, so it's best to use a single one everywhere.
