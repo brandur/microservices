@@ -57,3 +57,7 @@ The more consistent the technology stack and practices between all shared servic
 * Standards around services for deployment, logging, reporting, metrics, and CI will significanly ease integration over the long run.
 * Standards on languages, frameworks, and even individual libraries are a good idea to reduce cognitive overhead for engineers.
 * Universal coding conventions. Use linters in CI for enforcement.
+
+# Discrete Deploys
+
+Like the deployment of a single component should maintain compatibility with the code that is already running, the deployment of any component should be compatible with the overall service and not rely on lockstep deployments.
