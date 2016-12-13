@@ -50,4 +50,4 @@ This is especially crucial for secure connections which have traditionally requi
 
 Services being deployed separately shouldn't mean that each one should be its own special snowflake.
 
-Use a single protocol for intercommunication. Standardize on languages, frameworks, and even libraries. Use the same database (Postgres) everywhere. Use common services for purposes of deployment, logging, error reporting, metrics, and CI everywhere. Use linters to enforce conventions.
+Use a single protocol for intercommunication. Standardize on languages, frameworks, and even libraries. Use the same database everywhere. Use common services for purposes of deployment, logging, error reporting, metrics, and CI everywhere. Use linters to enforce conventions.
