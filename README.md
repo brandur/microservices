@@ -46,8 +46,14 @@ Speed is important and microservice architectures can introduce latency as more 
 
 This is especially crucial for secure connections which have traditionally required three round trips to construct, adding a lot of additional latency (although TLS 1.3 is likely to bring this down to one round trip).
 
-## Consistent Tooling
+## Consistency Is King
 
 Services being deployed separately shouldn't mean that each one should be its own special snowflake.
 
-Use a single protocol for intercommunication. Standardize on languages, frameworks, and even libraries. Use the same database everywhere. Use common services for purposes of deployment, logging, error reporting, metrics, and CI everywhere. Use linters to enforce conventions.
+The more consistent the technology stack and practices between all shared services, the lower the overhead to development and operations will be, and the easier it'll be for engineers to move between services and continue to maintain high levels of productivity. For example:
+
+* A single protocol should be shared for all communication between services (e.g. HTTP, GRPC, ...).
+* It takes a lot of experience to learn how to operate a database well, so it's best to use a single one everywhere.
+* Standards around services for deployment, logging, reporting, metrics, and CI will significanly ease integration over the long run.
+* Standards on languages, frameworks, and even individual libraries are a good idea to reduce cognitive overhead for engineers.
+* Universal coding conventions. Use linters in CI for enforcement.
