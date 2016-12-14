@@ -4,9 +4,17 @@
 
 ### Terminology
 
+This guide defines the following terminology for service-oriented systems:
+
+* A **service** is a software installation that runs and is deployed independently of other parts of the larger system. It is largely interchangeable with "microservice".
+* A **component** is a software module with well-defined interface boundaries that could operate as a part of service or be broken out into its own service if it's deemed to be beneficial.
+* A **platform** is a greater software system that makes up all of an organization's services and components.
+
 ### Practice Moderation
 
-Before breaking out a new service, sketch out its API and the contract between itself and other components in the system. Thoroughly consider how likely those contracts are to stay roughly in the same shape over the long term. If major changes are likely, keep the monolith.
+Service-oriented systems can result in large organizational, logistical, and operational benefits, but have very real drawbacks. Wide reaching changes that touch many services gain significant overhead in orchestration and the system gets harder to reason about as its complexity is fundamentally increased. In many situations, monolithic architectures are more appropriate.
+
+Practice moderation and objective thought when deciding whether to break out a service. Sketch out the API contract between itself and other components in the system. Thoroughly consider how likely those contracts are to stay roughly in the same shape over the long term. If major changes are likely, keep the monolith.
 
 ## Share Data, Not A Database
 
