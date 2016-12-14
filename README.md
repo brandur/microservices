@@ -1,6 +1,10 @@
 # Microservices
 
-## Practice Moderation
+## Introduction
+
+### Terminology
+
+### Practice Moderation
 
 Before breaking out a new service, sketch out its API and the contract between itself and other components in the system. Thoroughly consider how likely those contracts are to stay roughly in the same shape over the long term. If major changes are likely, keep the monolith.
 
