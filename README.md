@@ -30,7 +30,7 @@ Every request between two services is a potential failure.
 
 Where a non-interactive interface is possible, batch up communication by having services stream their state to each over a construct like a Kafka topic. This method is more robust because fewer messages need to be passed, and allows consumers to ingest changes more economically because changes are grouped.
 
-## Ensure Correctness With Atomic Databases
+## Ensure Correctness With Atomicity
 
 ACID transactions are the most powerful tool in existence for guaranteeing data integrity.
 
