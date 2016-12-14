@@ -61,3 +61,13 @@ The more consistent the technology stack and practices between all shared servic
 ## Deploy Discretely
 
 Like the deployment of a single component should maintain compatibility with the code that is already running, the deployment of any component should be compatible with the overall service and not rely on lockstep deployments.
+
+## Instrument, Observe, and Correlate
+
+Make services and the greater system observable through instrumentation and by using tracing techniques.
+
+When a service calls into another service it should offer a `Request-Id` and identify itself with a `User-Agent` where possible. An identifier should be available to trace a request's path through the entire platform and separate identifiers should be able to isolate activity within any given service.
+
+Services should instrument the time that it takes them to run and the time they spend calling into other services. If service time for the platform is degraded, it should be possible to tell whether time is being lost to a particular service or to degenerate network conditions.
+
+If an integration test is running against the platform and fails, it's not enough to know just that result; the test should be able to identify exactly which service caused its failure so that fixing it is immediately actionable.
