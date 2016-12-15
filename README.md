@@ -18,11 +18,19 @@ Practice moderation and objective thought when deciding whether to break out a s
 
 ## Share Data, Not A Database
 
+Sharing a database between services leads to an architecture that's fragile and immovable. Instead, state should be shared via well-defined public interfaces.
+
+---
+
 Never share an internal data schema between services because it makes changes to that schema slow, difficult, and dangerous.
 
 Instead, have services communicate with one another over well-defined public interfaces.
 
 ## Execute Idempotently
+
+Design API endpoints to be idempotent so that work can be safely retried in the event of a failure. Use idempotency keys where an idempotent design is not possible.
+
+---
 
 Messages between systems can fail at any time, leaving one system unsure of the state of the other.
 
@@ -32,11 +40,21 @@ Where idempotency is not possible, use a construct like idempotency keys to ensu
 
 ## Enforce Strong Contracts
 
+Strongly define every service's interface. Ensure backwards compatibility to prevent breakages.
+
+---
+
 Regardless of the technology in use to communicate between services, make sure that interfaces are strongly defined and protected against accidental changes. Regressions in an API can easily break the integration between two components.
+
+Spec APIs out using a format that declaratively describes their characteristics.
 
 Communication via constructs like event streams and other real time APIs counts! Messages that are published into a stream should be as concretely defined as any API.
 
 ## Stream State Changes
+
+Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over multitudes of synchronous service requests.
+
+---
 
 Every request between two services is a potential failure.
 
@@ -44,21 +62,35 @@ Where a non-interactive interface is possible, batch up communication by having 
 
 ## Ensure Correctness With Atomicity
 
-ACID transactions are the most powerful tool in existence for guaranteeing data integrity.
+ACID transactions are the most powerful tool in existence for guaranteeing data integrity. Use them to ensure correctness within the bounds of any particular service.
+
+---
 
 Use them within the bounds of any particular service. Calls to external services can result in inconsistent distributed state, so wherever possible converge state between services asynchronously.
 
 ## Defend In Depth
 
+Security should be layered. Use TLS for communication between services even when they're known to be secured within a VPC.
+
+---
+
 Security should be layered. Services should use a secure protocol like TLS to talk to each other, even if they're known to be isolated in something like a VPC.
 
 ## Pool Connections
+
+Use connection pools for more efficient communication between services.
+
+---
 
 Speed is important and microservice architectures can introduce latency as more information is passed across networks. Use connection pools when communicating between services so that connections that were opened previously can be re-used.
 
 This is especially crucial for secure connections which have traditionally required three round trips to construct, adding a lot of additional latency (although TLS 1.3 is likely to bring this down to one round trip).
 
 ## Normalize Practices
+
+Services within a platform all perform very different duties, but treat them the same as possible by standardizing on languages, frameworks, and tooling.
+
+---
 
 Services being deployed separately shouldn't mean that each one should be its own special snowflake.
 
@@ -72,11 +104,17 @@ The more consistent the technology stack and practices between all shared servic
 
 ## Deploy Discretely
 
+Deploy services so that they're compatible with the versions of every other running services. Coordinated multi-service deployments should never be a necessity.
+
+---
+
 Like the deployment of a single component should maintain compatibility with the code that is already running, the deployment of any component should be compatible with the overall service and not rely on lockstep deployments.
 
 ## Instrument, Observe, and Correlate
 
-Make services and the greater system observable through instrumentation and by using tracing techniques.
+Make services and the greater system observable by instrumenting communication between services and by using tracing techniques.
+
+---
 
 When a service calls into another service it should offer a `Request-Id` and identify itself with a `User-Agent` where possible. An identifier should be available to trace a request's path through the entire platform and separate identifiers should be able to isolate activity within any given service.
 
