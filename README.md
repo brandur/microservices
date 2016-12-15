@@ -36,7 +36,7 @@ Regardless of the technology in use to communicate between services, make sure t
 
 Communication via constructs like event streams and other real time APIs counts! Messages that are published into a stream should be as concretely defined as any API.
 
-## Consider The Log
+## Stream State Changes
 
 Every request between two services is a potential failure.
 
