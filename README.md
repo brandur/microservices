@@ -22,7 +22,7 @@ Never share an internal data schema between services because it makes changes to
 
 Instead, have services communicate with one another over well-defined public interfaces.
 
-## Idempotency Is the Key
+## Execute Idempotently
 
 Messages between systems can fail at any time, leaving one system unsure of the state of the other.
 
