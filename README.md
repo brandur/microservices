@@ -52,7 +52,7 @@ Communication via constructs like event streams and other real time APIs counts!
 
 ## Stream State Changes
 
-Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over multitudes of synchronous service requests.
+Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over sending multitudes of synchronous service requests.
 
 ---
 
