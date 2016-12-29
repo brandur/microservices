@@ -122,6 +122,40 @@ Services should instrument the time that it takes them to run and the time they 
 
 If an integration test is running against the platform and fails, it's not enough to know just that result; the test should be able to identify exactly which service caused its failure so that fixing it is immediately actionable.
 
+## Be Resilient
+
+Harden services by considering when their dependencies might become unavailable and using circuit breakers to protect themselves against degraded external conditions. Use rate limiting and control rods to build layers of defense.
+
+---
+
+Identify single points of failure and compensate for their unavailability where possible. For example, a service might not be able to make much progress anyway if it's database becomes totally unavailable, but should be able to stay online if its ephemeral Redis gets knocked offline.
+
+### Circuit Breakers
+
+The _circuit breaker_ pattern identifies a certain number of failures from an external service within a configured period of time. During such an event the circuit breaker "opens" so that subsequent requests to that service fail automatically and cheaply without having to wait on an expensive timeout. An external service in this sense might be another service with the platform, or an attached resource like Redis.
+
+After a grace period, the circuit breaker re-engages and more requests are allowed through. If the external service has since recovered, operations continue normally; if not, the circuit breaker will break open again and the cycle will repeat.
+
+The important function that circuit breakers provide is to help keep a service up even if some of its critical dependencies have gone down thus protecting against _cascading failure_. Without circuit breakers, it's easy for a service to start timing out requests as its own internal requests are timing out.
+
+### Rate Limiting
+
+Use rate limiting liberally to ensure that the rate of incoming requests stay within the maximum bounds of what a service is able to fulfill with its currently available resources.
+
+In a distributed environment where thousands of servers are talking to each other, an external event can easily trigger a _thundering herd_ problem where many nodes of a service trigger requests simultaneously and accidentally DDOS another service.
+
+This is especially important for faster services like Go or Rust where a backing database or other single point of failure is likely to degrade to degrade before its fleet of application workers. Although rate limits are often implemented on a per-user basis, it's advisable in this case to implement a service-wide rate limit that roughly represents the floor of its maximum capacity and the maximum capacity of all its critical dependencies.
+
+### Control Rods
+
+Implement control rods that can be manually enabled or disabled by a human operator during emergencies.
+
+The most simple control rod is one that enables full maintenance lockdown by having the service respond only with 503s ("service unavailable") instead of fulfilling any normal requests. This is of course highly disruptive to services that may depend on it, so more granular control rods can be implemented to help keep the platform healthy:
+
+* One that allows a service's maximum rate limit to be scaled to a fraction of normal (e.g. 0.1x). This allows some traffic to succeed even while the platform as a whole continues to be generally degraded.
+* One that allows particular IPs or user agents to be banned. Useful for temporarily disallowing other services that may be behaving pathologically due to a bug.
+* A set that allow individual external service dependencies to be disabled. This can be used to keep some requests succeeding by disabling those that rely on an external service that's known to be completely degraded.
+
 ## Publish Playbooks
 
 Write playbooks for services that are simple enough operators who aren't core contributors to use successfully. Keep them succinct so that they're easy to reference and resistant to bit rot.
