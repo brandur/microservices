@@ -52,7 +52,7 @@ Communication via constructs like event streams and other real time APIs counts!
 
 ## Stream State Changes
 
-Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over multitudes of synchronous service requests.
+Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over sending multitudes of synchronous service requests.
 
 ---
 
@@ -155,3 +155,38 @@ The most simple control rod is one that enables full maintenance lockdown by hav
 * One that allows a service's maximum rate limit to be scaled to a fraction of normal (e.g. 0.1x). This allows some traffic to succeed even while the platform as a whole continues to be generally degraded.
 * One that allows particular IPs or user agents to be banned. Useful for temporarily disallowing other services that may be behaving pathologically due to a bug.
 * A set that allow individual external service dependencies to be disabled. This can be used to keep some requests succeeding by disabling those that rely on an external service that's known to be completely degraded.
+
+## Publish Playbooks
+
+Write playbooks for services that are simple enough operators who aren't core contributors to use successfully. Keep them succinct so that they're easy to reference and resistant to bit rot.
+
+---
+
+Services should ship with playbooks that describe the basic structure of deployments along with the most important operations that may need to be run during maintenance or an emergency. It's useful to imagine a playbook's reader as someone who isn't a core contributor to the project so that in a particularly rough spot, the service can still be operated even if none of its normal shepherds are present.
+
+Examples of what might be included in a playbook:
+
+* The service's deployment structure: which servers it resides on, what its critical dependencies are, instructions for carrying out a deployment, etc.
+* Links to important dashboards and other visibility tools.
+* The names of any alarms that might be triggered by the service, and what a human operator should do to resolve them.
+* A list of available control rods, a basic description of each, and how to activate them.
+
+## Succinctness
+
+Brevity is important for a few reasons:
+
+* A production incident is a very stressful time during which it can be difficult to think clearly or deeply. Documents that are amenable to being skimmed are particularly valuable during such a time. Commands in them should be "clipboard friendly" so that users can copy and run them easily and safely.
+* Documents that aren't in constant use tend to be susceptible to bit rot and quickly fall out of date. A succinct document is easier to update, and therefore less prone to this problem.
+
+### Executable Playbooks
+
+Playbooks are good, but executable playbooks are even better. Unfortunately, by definition playbooks are only referenced in unusual situations, and documentation that's not in constant use is incredibly prone to falling out-of-date.
+
+Mature services should consider shipping their own set of operator tools that empower even a naive operator to resolve all but the most unusual problems. Unlike documentation, programmatic tools can be compiled and tested in CI which is an incredibly powerful tool for ensuring their correctness.
+
+Some good practices:
+
+* Make operator tools trivial to install so that an operator responding to an incident can access them as soon as possible. A package repository that's already widely distributed internally is a good option.
+* Write good `--help` documentation that's useful even to a first time user. Include examples.
+* Write tests and run them in CI. There's nothing worse than a tool that fails as soon as it's needed.
+* Where possible, include tab completion and other niceties. The more discoverable and the _more quickly_ discoverable an interface is, the better.
