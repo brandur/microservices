@@ -1,5 +1,25 @@
 # Microservices
 
+- Introduction
+  - [Terminology]()
+  - [Practice Moderation]()
+- Isolation
+  - [Share Data, Not A Database]()
+  - [Deploy Discretely]()
+- Composition
+  - [Enforce Strong Contracts]()
+  - [Execute Idempotently]()
+  - [Stream State Changes]()
+  - [Be A Good Citizen]()
+  - [Pool Connections]()
+- Resilience
+  - [Be Resilient]()
+  - [Ensure Correctness With Atomicity]()
+  - [Defend In Depth]()
+- Operation
+  - [Instrument, Observe, and Correlate]()
+  - [Normalize Practices]()
+
 ## Introduction
 
 ### Terminology
@@ -75,6 +95,19 @@ Security should be layered. Use TLS for communication between services even when
 ---
 
 Security should be layered. Services should use a secure protocol like TLS to talk to each other, even if they're known to be isolated in something like a VPC.
+
+## Be A Good Citizen
+
+Services should aim to be good citizens within the context of the wider platform by behaving responsibly when making calls out to other services.
+
+---
+
+### Exponential Backoff
+
+
+### Jitter
+
+When waiting to retry an operation, at some random jitter to the wait time. Other nodes may be waiting to retry the same operation and the added randomness will prevent everyone from doing so in lockstep, which could be dangerous for a target service.
 
 ## Pool Connections
 
