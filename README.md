@@ -223,3 +223,7 @@ Some good practices:
 * Write good `--help` documentation that's useful even to a first time user. Include examples.
 * Write tests and run them in CI. There's nothing worse than a tool that fails as soon as it's needed.
 * Where possible, include tab completion and other niceties. The more discoverable and the _more quickly_ discoverable an interface is, the better.
+
+<!--
+> vim: set tw=2000:
+-->
