@@ -33,4 +33,6 @@ e.g. "Introduction", "Isolation"
   some cases, but a section's inclusion should be easily
   justifiable.
 
-# vim: set tw=59:
+<!--
+> vim: set tw=59:
+-->
