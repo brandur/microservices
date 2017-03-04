@@ -60,7 +60,7 @@ Where idempotency is not possible, use a construct like idempotency keys to ensu
 
 ## Enforce Strong Contracts
 
-Strongly define every service's interface. Ensure backwards compatibility to prevent breakages.
+Strongly define every service's interface and make sure that services test their own APIs for regressions. Ensure backwards compatibility to prevent breakages.
 
 ---
 
