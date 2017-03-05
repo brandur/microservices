@@ -252,5 +252,5 @@ Some good practices:
 * Where possible, include tab completion and other niceties. The more discoverable and the _more quickly_ discoverable an interface is, the better.
 
 <!--
-> vim: set tw=2000:
+> vim: set tw=20000:
 -->
