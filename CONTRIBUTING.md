@@ -20,6 +20,9 @@ e.g. "Execute Idempotently"
   four subheaders. More desired subheadings may be an
   indication that the section should be broken up.
 
+* Section landing pages should have a paragraph or two of
+  general content before starting into a subheading.
+
 ### Categories
 
 e.g. "Introduction", "Isolation"
