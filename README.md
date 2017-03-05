@@ -70,6 +70,12 @@ Spec APIs out using a format that declaratively describes their characteristics.
 
 Communication via constructs like event streams and other real time APIs counts! Messages that are published into a stream should be as concretely defined as any API.
 
+### Private APIs
+
+The longer a service is in operation, the more likely it'll be that someone will suggest that it should support a one-off experimental API or a private API for limited use by another service.
+
+Despite the best of intentions, these sorts of API compromises that go into even semi-production use have a bad habit of becoming permanent and resulting in long-term operational and design debt. Avoid introducing them at all costs.
+
 ## Stream State Changes
 
 Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over sending multitudes of synchronous service requests.
@@ -82,11 +88,15 @@ Where a non-interactive interface is possible, batch up communication by having 
 
 ## Ensure Correctness With Atomicity
 
-ACID transactions are the most powerful tool in existence for guaranteeing data integrity. Use them to ensure correctness within the bounds of any particular service.
+ACID transactions are the most powerful tool in existence for guaranteeing data integrity. Use them to ensure correctness within the service bounds.
 
 ---
 
 Use them within the bounds of any particular service. Calls to external services can result in inconsistent distributed state, so wherever possible converge state between services asynchronously.
+
+ACID.
+
+Document Stores vs. RDMS.
 
 ## Defend In Depth
 
@@ -204,7 +214,7 @@ Examples of what might be included in a playbook:
 * The names of any alarms that might be triggered by the service, and what a human operator should do to resolve them.
 * A list of available control rods, a basic description of each, and how to activate them.
 
-## Succinctness
+### Succinctness
 
 Brevity is important for a few reasons:
 
