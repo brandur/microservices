@@ -7,6 +7,7 @@
   - [Share Data, Not A Database]()
   - [Deploy Discretely]()
 - Composition
+  - [Use Common Protocols and Conventions]()
   - [Enforce Strong Contracts]()
   - [Execute Idempotently]()
   - [Stream State Changes]()
@@ -39,13 +40,29 @@ Practice moderation and objective thought when deciding whether to break out a s
 
 ## Share Data, Not A Database
 
-Sharing a database between services leads to an architecture that's fragile and immovable. Instead, state should be shared via well-defined public interfaces.
+Sharing information between services by plugging a single database into multiple services is a tempting shortcut, but will ultimately lead to an architecture that's fragile and static. Avoid going down this road and share data via well-defined APIs instead.
 
 ---
 
-Never share an internal data schema between services because it makes changes to that schema slow, difficult, and dangerous.
+Services with inevitably need to share information. It can occasionally be tempting to have databases communicate with each other by attaching a single database to more than a single service and have them all read and/or write out of it. For example, a billing service could reach into the database of other services to determine how users should be billed.
 
-Instead, have services communicate with one another over well-defined public interfaces.
+Although this architecture will probably come with the smallest capital investment, it will be a costly mistake over the long run as an architecture manifests that's fragile and difficult to change.
+
+Take for example a fairly run of the mill migration where we drop a column that was previously used but is now no longer needed:
+
+``` sql
+ALTER TABLE users DROP COLUMN password_v1;
+```
+
+Normally, this could be accomplished relatively easily by deploying code changes to a service to make sure that it stops referencing the column, then simply running the migration. However, with multiple services connected to the database, care must be taken to deploy code changes to all of them before the migration can be run. Given that there's a reasonable chance that these services are owned across multiple teams, this will probably take much greater coordination overhead, and it be very tempting to just not make the change instead of making the effort.
+
+The most common results will be either slowed product development because changes are difficult, or accumulation of technical debt as nothing gets cleaned up. An even riskier problem is that an unsafe change is deployed because database dependencies are opaque and unintuitive, resulting in the breakage of another service and leading to a production incident.
+
+Services that detect their schema implicitly using a framework like Active Record can be an even bigger problem because they may rely on a certain schema even if it's not obvious from their application code.
+
+Although we've used a migration as an example, it's noteworthy that the same applies to any kind of operational maintenance that's needed by the shared database. Failovers and credential rotations are just as difficult.
+
+Instead, have services communicate with one another over well-defined APIs. Attached databases should be implementation details that are fully abstracted away services to the point where they're completely hidden from view.
 
 ## Execute Idempotently
 
@@ -58,6 +75,18 @@ Messages between systems can fail at any time, leaving one system unsure of the 
 Prefer idempotent API calls so that in the event of a failure, systems can safely retry operations.
 
 Where idempotency is not possible, use a construct like idempotency keys to ensure exactly one delivery.
+
+## Use Common Protocols and Conventions
+
+---
+
+HTTP
+
+RESTful
+
+GRPC.
+
+GraphQL.
 
 ## Enforce Strong Contracts
 
