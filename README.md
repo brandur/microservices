@@ -16,6 +16,7 @@
   - [Use Common Resiliency Patterns]()
   - [Ensure Correctness With Atomicity]()
   - [Defend In Depth]()
+  - [Exercise the Platform]()
 - Operation
   - [Instrument, Observe, and Correlate]()
   - [Normalize Practices]()
@@ -105,6 +106,22 @@ Security should be layered. Use TLS for communication between services even when
 ---
 
 Security should be layered. Services should use a secure protocol like TLS to talk to each other, even if they're known to be isolated in something like a VPC.
+
+## Exercise the Platform
+
+---
+
+Put baseline load on the platform. If you have something like a QA or staging cloud, do the same thing there.
+
+### Integration Testing
+
+Put an integration testing framework into place that runs testing against the platform's common paths constantly so that regressions in the communication between components can be detected immediately.
+
+Failures should be immediately actionable in that they can detect the misbehaving service(s) and notify their owners. Knowing about a failure at the platform-level isn't enough because it's not likely to have an owner that can chase it down.
+
+### Chaos Monkey
+
+Use chaos monkey techniques to inject failure. Fault tolerance that's not tested periodically isn't going to work when you need it.
 
 ## Be A Good Citizen
 
