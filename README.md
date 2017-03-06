@@ -78,15 +78,15 @@ Where idempotency is not possible, use a construct like idempotency keys to ensu
 
 ## Use Common Protocols and Conventions
 
+Standardize on a single protocol to power all interservice communication and establish usage conventions within that protocol so that service APIs are consistent and predictable.
+
 ---
 
-HTTP
+These days there are many plausible alternatives for communication protocols between services. GraphQL and GRPC are two more modern ones, while Thrift has a good track record and will probably always be around, and a strong argument can be made for basic HTTP or HTTP/2 in just how common and widely supported they are.
 
-RESTful
+This guide won't champion a particular protocol, but does recommend that whatever it is, it's made standard across the platform. A common protocol means that APIs can be reused across services and that clients and other toolkits can be refined and shared.
 
-GRPC.
-
-GraphQL.
+Within the bounds of whatever protocol is selected, establish strong common conventions. For example, if HTTP is used, use something like the [HTTP API style guide]() to make sure that verbs, naming, and idioms are consistent across every service. This might be slightly less critical for an RPC-like protocol, but it's still a good idea to try and maintain consistent naming and structure within endpoints.
 
 ## Enforce Strong Contracts
 
