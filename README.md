@@ -10,12 +10,12 @@
   - [Use Common Protocols and Conventions]()
   - [Enforce Strong Contracts]()
   - [Execute Idempotently]()
-  - [Stream State Changes]()
   - [Be a Good Citizen]()
   - [Pool Connections]()
 - Resilience
   - [Use Common Patterns for Resiliency]()
   - [Ensure Correctness With Atomicity]()
+  - [Stream State Changes]()
   - [Defend In Depth]()
   - [Exercise the Platform]()
 - Operation
@@ -131,16 +131,6 @@ The longer a service is in operation, the more likely it'll be that at some poin
 
 Despite the best of intentions, these sorts of compromises that make it anywhere near production have a bad habit of becoming permanent and resulting in long-term operational and design debt. This isn't always a fait accompli, but is a frequent enough that is should e considered a probable result. In general, avoid introducing private and one-off APIs and instead work on integrating the necessary changes into the mainline API.
 
-## Stream State Changes
-
-Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over sending multitudes of synchronous service requests.
-
----
-
-Every request between two services is a potential failure.
-
-Where a non-interactive interface is possible, batch up communication by having services stream their state to each over a construct like a Kafka topic. This method is more robust because fewer messages need to be passed, and allows consumers to ingest changes more economically because changes are grouped.
-
 ## Ensure Correctness With Atomicity
 
 ACID transactions are the most powerful tool in existence for guaranteeing data integrity. Use an RDMS that provides ACID guarantees to ensure correctness within the service bounds.
@@ -152,6 +142,44 @@ Use them within the bounds of any particular service. Calls to external services
 ACID.
 
 Document Stores vs. RDMS.
+
+## Stream State Changes
+
+Streaming changes in state through a log-style stream is efficient provides ordering and inherent error correction. Consider using this technique over sending multitudes of synchronous service requests.
+
+---
+
+On a large enough scale, even the most reliable of networks will demonstrate a considerable level of background failure. Any API call between two services has the potential to fail, so it follows that the fewer we make, the more robust our system is likely to be.
+
+We can accomplish this by _batching_ API calls so that instead of transferring state on a one-off basis as changes occur, we instead transmit it in bulk by moving a large number of changes in a single call. An effective pattern for this is for an emitting to publish a _log_ of state changes to something like a Kafka topic or Kinesis stream and have other services consume it. This also has the advantages of being very efficient from a resource consumption perspective and guaranteeing that consumers receive those changes in the order which they occurred.
+
+A practical example of this are webhooks. While somewhat of a romantic idea in that they use basic HTTP requests to stream state, they also come with some serious drawbacks:
+
+* There's one HTTP request per state change, and that proposition comes with all the overhead that you'd expect.
+* A webhook that doesn't execute successfully needs to be retried by its emitter. This puts a huge burden on it to ensure that all the bookkeeping occurs correctly.
+* Webhooks are inherently unordered. Even if a single webhook request starts before another, connection delay or slow responsiveness on the part of the receiver could mean it finishes processing after one that started later.
+
+A streamed log has none of these disadvantages.
+
+### Transactional Checkpoints
+
+Emitting to a stream can be combined with checkpointing to an ACID database for a very powerful mechanism for guaranteed delivery. An emitter can ensure that everything it expects to emit is delivered at least one time:
+
+``` ruby
+loop do
+  begin
+    DB.transaction do
+      events = DB[:events_to_emit].all
+      emit_to_log(events)
+      DB[:events].where('id in (?)', events.map{ |e| e.id }).delete
+    end
+  rescue => e
+    log "Error while emitting to stream: #{e}"
+  end
+end
+```
+
+A consumer can then use a similar mechanism to make sure that everything it expects to consume is handled at least one time.
 
 ## Defend In Depth
 
