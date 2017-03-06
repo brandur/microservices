@@ -21,6 +21,7 @@
 - Operation
   - [Instrument, Observe, and Correlate]()
   - [Normalize Practices]()
+  - [Use a Platform]()
 
 ## Introduction
 
@@ -341,6 +342,21 @@ Some good practices:
 * Write good `--help` documentation that's useful even to a first time user. Include examples.
 * Write tests and run them in CI. There's nothing worse than a tool that fails as soon as it's needed.
 * Where possible, include tab completion and other niceties. The more discoverable and the _more quickly_ discoverable an interface is, the better.
+
+## Use a Platform
+
+Make the lives of service owners easier by having a delivery team provide the plumbing in the form of an easily deployable and fully featured platform.
+
+---
+
+Some features that a platform should provide:
+
+* Abstraction from node-specific configuration like Puppet.
+* Bootstraps for commonly deployed languages and frameworks like Ruby, Python, etc.
+* Easy deployments.
+* Secret management.
+* Log rotation and unification.
+* Asset compilation, distribution to CDN, and versioning.
 
 <!--
 > vim: set tw=20000:
