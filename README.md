@@ -171,7 +171,7 @@ loop do
     DB.transaction do
       events = DB[:events_to_emit].all
       emit_to_log(events)
-      DB[:events].where('id in (?)', events.map{ |e| e.id }).delete
+      DB[:events].where('id in (?)', events.map { |e| e.id }).delete
     end
   rescue => e
     log "Error while emitting to stream: #{e}"
@@ -183,11 +183,20 @@ A consumer can then use a similar mechanism to make sure that everything it expe
 
 ## Defend In Depth
 
-Security should be layered. Use TLS for communication between services even when they're known to be secured within a VPC.
+Security should be layered. Host a platform within an isolated VPN, use TLS to communicate between services within the VPN, and lock down access with service-specific credentials.
 
 ---
 
-Security should be layered. Services should use a secure protocol like TLS to talk to each other, even if they're known to be isolated in something like a VPC.
+Platforms should be comprehensively secured by layering security so that even if one layer is compromised, the platform stays safe from attack.
+
+Some examples:
+
+* A platform should be isolated into its own VPN with a minimal set of rules for ingress and egress to represent how it needs to talk to users in the outside world.
+* Services within the VPN should use TLS to talk to each other in case an attacker has compromised the VPN and is able to man in the middle some connections.
+* Services should require that other services talking to them authenticate when they do so. This prevents an attack who has compromised the VPN from connecting to services within it.
+* Secrets like database credentials should be encrypted at rest within a service. This prevents an attack who has compromised a single node from getting access to other critical services.
+
+A good example of defense in depth is when [Gmail started encrypting email even when moving it within its own data centers](https://gmail.googleblog.com/2014/03/staying-at-forefront-of-email-security.html) after the Snowden revelations suggested that state-level actors may have compromised its perimeter.
 
 ## Exercise the Platform
 
