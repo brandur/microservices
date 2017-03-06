@@ -90,21 +90,46 @@ Within the bounds of whatever protocol is selected, establish strong common conv
 
 ## Enforce Strong Contracts
 
-Strongly define every service's interface and make sure that services test their own APIs for regressions. Ensure backwards compatibility to prevent breakages.
+Strongly define every service's interface and make sure that services test their own APIs for regressions. Ensure backwards compatibility to prevent breakages and avoid introducing private APIs.
 
 ---
 
-Regardless of the technology in use to communicate between services, make sure that interfaces are strongly defined and protected against accidental changes. Regressions in an API can easily break the integration between two components.
+The easiest way to break a platform is to have one service break the contract that another serivce is using to communicate with it. This can happen for a number of reasons, but a very common problem is that APIs are implicit and broken accidentally; for example, if an API call's response is a JSON blob and someone changes the type of one field from a string to an integer. Another common pitfall is that semantics around backwards compatibility aren't well understood, and an incompatible change is introduced inadvertently.
 
-Spec APIs out using a format that declaratively describes their characteristics.
+### API Specifications
 
-Communication via constructs like event streams and other real time APIs counts! Messages that are published into a stream should be as concretely defined as any API.
+APIs should be strongly defined by giving them a declarative description that dictates exactly what endpoints are available, what parameters they take, and what gets included in their responses. There are a number of competing description formats for API specifications, but a good bet right now might be [OpenAPI]() for example.
+
+However, simply defining a specification isn't enough. Every service must be able to confidently claim that they adhere to their advertised API by ensuring that their implementations are constantly and automatically tested against it on every change.
+
+Building a test suite that uses a tool like [Committee]() to test interfaces and running it in CI is an example of an appropriate solution for ensuring compliance to a specification.
+
+### Backwards Compatibility
+
+Introducing a change in an API that's not backwards compatible is an easy way of breaking integration inside of a platform. For example, one service might drop a field from an API call's response that another service expects to be there.
+
+These are a few examples of rules for maintaining backwards compatibility:
+
+* Don't require new parameters to API calls that weren't required before. Adding a new optional parameter is okay.
+* Don't make validations on existing parameters to API calls more strict than they were before. Adding new parameters with stricter validation is okay.
+* Don't drop fields from API responses. Adding new fields is okay.
+* Don't change the type or formatting of fields in API responses. Adding a new (and nearly identical) field with a different type is okay.
+
+Remember that although these rules are perhaps most application to RPC and RESTful APIs, they still apply to any medium that services use to communicate. For example, the format of messages that are published into something like a streaming API should be treated just as strictly.
+
+### API Versioning
+
+A common scheme for maintaining backwards compatibility is versioning an exposed API so that multiple versions are running simultaneously and services can cut over to an updated version when they're ready to do so.
+
+In practice, versioning can sometimes be a useful technique, but tends to produce a signifcant amount of technical debt because version upgrades are very onerous and not executed in a timely manner. The result is that both the old and new API versions have to run side-by-side in production far longer than had been originally intended. Especially for internal APIs this is more operational overhead than it's worth and should be avoided.
+
+Instead design APIs to be "rolling" so that changes are small and incremental. This has the effect of significantly reducing the upgrade effort for integrations and making them more likely to stay up to date. It also eases operational burden because only a single API version needs to be run and maintained.
 
 ### Private APIs
 
-The longer a service is in operation, the more likely it'll be that someone will suggest that it should support a one-off experimental API or a private API for limited use by another service.
+The longer a service is in operation, the more likely it'll be that at some point an involed party will suggest that it should support a one-off experimental API or a private API for limited use by another service.
 
-Despite the best of intentions, these sorts of API compromises that go into even semi-production use have a bad habit of becoming permanent and resulting in long-term operational and design debt. Avoid introducing them at all costs.
+Despite the best of intentions, these sorts of compromises that make it anywhere near production have a bad habit of becoming permanent and resulting in long-term operational and design debt. This isn't always a fait accompli, but is a frequent enough that is should e considered a probable result. In general, avoid introducing private and one-off APIs and instead work on integrating the necessary changes into the mainline API.
 
 ## Stream State Changes
 
