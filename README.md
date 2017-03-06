@@ -14,7 +14,7 @@
   - [Be A Good Citizen]()
   - [Pool Connections]()
 - Resilience
-  - [Use Common Resiliency Patterns]()
+  - [Use Common Patterns for Resiliency]()
   - [Ensure Correctness With Atomicity]()
   - [Defend In Depth]()
   - [Exercise the Platform]()
@@ -236,7 +236,7 @@ Services should instrument the time that it takes them to run and the time they 
 
 If an integration test is running against the platform and fails, it's not enough to know just that result; the test should be able to identify exactly which service caused its failure so that fixing it is immediately actionable.
 
-## Use Common Resiliency Patterns
+## Use Common Patterns for Resiliency
 
 Harden services by considering when their dependencies might become unavailable and using circuit breakers to protect themselves against degraded external conditions. Use rate limiting and control rods to build layers of defense.
 
