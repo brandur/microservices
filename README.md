@@ -143,7 +143,7 @@ Where a non-interactive interface is possible, batch up communication by having 
 
 ## Ensure Correctness With Atomicity
 
-ACID transactions are the most powerful tool in existence for guaranteeing data integrity. Use them to ensure correctness within the service bounds.
+ACID transactions are the most powerful tool in existence for guaranteeing data integrity. Use an RDMS that provides ACID guarantees to ensure correctness within the service bounds.
 
 ---
 
