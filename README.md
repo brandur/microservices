@@ -11,7 +11,7 @@
   - [Enforce Strong Contracts]()
   - [Execute Idempotently]()
   - [Stream State Changes]()
-  - [Be A Good Citizen]()
+  - [Be a Good Citizen]()
   - [Pool Connections]()
 - Resilience
   - [Use Common Patterns for Resiliency]()
@@ -177,7 +177,7 @@ Failures should be immediately actionable in that they can detect the misbehavin
 
 Use chaos monkey techniques to inject failure. Fault tolerance that's not tested periodically isn't going to work when you need it.
 
-## Be A Good Citizen
+## Be a Good Citizen
 
 Services should aim to be good citizens within the context of the wider platform by behaving responsibly when making calls out to other services.
 
