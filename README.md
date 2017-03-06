@@ -4,7 +4,7 @@
   - [Terminology]()
   - [Practice Moderation]()
 - Isolation
-  - [Share Data, Not A Database]()
+  - [Share Data, Not a Database]()
   - [Deploy Discretely]()
 - Composition
   - [Use Common Protocols and Conventions]()
@@ -38,7 +38,7 @@ Service-oriented systems can result in large organizational, logistical, and ope
 
 Practice moderation and objective thought when deciding whether to break out a service. Sketch out the API contract between itself and other components in the system. Thoroughly consider how likely those contracts are to stay roughly in the same shape over the long term. If major changes are likely, keep the monolith.
 
-## Share Data, Not A Database
+## Share Data, Not a Database
 
 Sharing information between services by plugging a single database into multiple services is a tempting shortcut, but will ultimately lead to an architecture that's fragile and static. Avoid going down this road and share data via well-defined APIs instead.
 
