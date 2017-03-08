@@ -11,7 +11,7 @@
   - [Enforce Strong Contracts]()
   - [Execute Idempotently]()
   - [Be a Good Citizen]()
-  - [Pool Connections]()
+  - [Communicate Economically]()
 - Resilience
   - [Use Common Patterns for Resiliency]()
   - [Ensure Correctness With Atomicity]()
@@ -245,13 +245,21 @@ If an abrupt problem in a service causes a large number of clients that are comm
 
 An easy solution is to introduce randomness to those wait times. This causes the schedules of each client retrying to drift apart and space out the load on the degraded service, which will help contribute to its recovery.
 
-## Pool Connections
+## Communicate Economically
 
-Use connection pools for more efficient communication between services.
+Communicate efficiency between services to keep the platform fast. Practice austerity in the total number of interservice calls made, pool connections to minimize overhead, and use efficient protcols and data transfer formats.
 
 ---
 
 Speed is important and microservice architectures can introduce latency as more information is passed across networks. Use connection pools when communicating between services so that connections that were opened previously can be re-used.
+
+Use connection pools for more efficient communication between services.
+
+Efficient protocols.
+
+GraphQL
+
+### Connection Pooling
 
 This is especially crucial for secure connections which have traditionally required three round trips to construct, adding a lot of additional latency (although TLS 1.3 is likely to bring this down to one round trip).
 
