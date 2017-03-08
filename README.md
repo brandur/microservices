@@ -201,19 +201,27 @@ A good example of defense in depth is when [Gmail started encrypting email even 
 
 ## Exercise the Platform
 
+Make sure that a platform is active at all times so that problems can be detected even if they came in on recent changes. If this is a non-production installations, use integration testing to verify it's working as expected.
+
 ---
 
-Put baseline load on the platform. If you have something like a QA or staging cloud, do the same thing there.
+Any system that's never used is likely to not work as expected when it's needed. It's a good idea to make sure that a platform has enough activity happening in it so to be reasonably confident that it's work as intended.
+
+A production platform might have enough baseline load on it to give reasonable reassurance, but it's very common when it comes to QA and staging platforms to see them essentially idle. It's there especially that it becomes very important to make sure that common paths are exercised automatically with simulated traffic or broad integration testing.
 
 ### Integration Testing
 
-Put an integration testing framework into place that runs testing against the platform's common paths constantly so that regressions in the communication between components can be detected immediately.
+Put an integration testing framework into place that runs operations against a platform in a way that closely simulates what real users would do. By forcing end-to-end integration between all the relevant services within a platform, these sorts of tests allow regressions to be detected quickly and hopefully before users see them.
 
-Failures should be immediately actionable in that they can detect the misbehaving service(s) and notify their owners. Knowing about a failure at the platform-level isn't enough because it's not likely to have an owner that can chase it down.
+Integration tests are often so general that just knowing about a failure isn't very useful. It's key to make sure that your testing framework is smart enough not to just identify when a failure occurs, but be able to precisely identify the service causing the failure. By investing in this sort of accuracy an organization can save countless hours of engineering time because instead of pulling in all hands on deck when a failure occurs, only the relevant teams need be notified.
 
 ### Chaos Monkey
 
-Use chaos monkey techniques to inject failure. Fault tolerance that's not tested periodically isn't going to work when you need it.
+Exercising the normal operation of a platform is of paramount importance, but it's often worthwhile taking it a step further by also exercising its ability to tolerate fault and recover from errors.
+
+Netflix coined the idea of a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey) whose job it is to go through a platform and randomly introduce fault by terminating systems and performing other acts of mischief. Doing so allows backup systems a chance to come online and attempt to restore the platform's health.
+
+The principle here is identical to the idea of putting standard load on a platform. Just as with the operations of normal paths, systems for error recovery are also unlikely to work unless they're tested regularly.
 
 ## Be a Good Citizen
 
