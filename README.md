@@ -205,7 +205,7 @@ Make sure that a platform is active at all times so that problems can be detecte
 
 ---
 
-Any system that's never used is likely to not work as expected when it's needed. It's a good idea to make sure that a platform has enough activity happening in it so to be reasonably confident that it's work as intended.
+Any system that's never used is likely to not work as expected when it's needed. It's a good idea to make sure that a platform has enough activity happening in it so to be reasonably confident that its working as intended.
 
 A production platform might have enough baseline load on it to give reasonable reassurance, but it's very common when it comes to QA and staging platforms to see them essentially idle. It's there especially that it becomes very important to make sure that common paths are exercised automatically with simulated traffic or broad integration testing.
 
