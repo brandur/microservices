@@ -225,16 +225,25 @@ The principle here is identical to the idea of putting standard load on a platfo
 
 ## Be a Good Citizen
 
-Services should aim to be good citizens within the context of the wider platform by behaving responsibly when making calls out to other services.
+Services should aim to be good citizens within the context of the wider platform by behaving responsibly with respect to degraded conditions. When observing failures in API calls to other services, use exponential backoff and random jitter to help with expedient recovery.
 
 ---
 
+A baseline level of intermittent failure is expected in any kind of distributed system, so when an API call to another service fails, it's appropriate to retry after only a short waiting period in case it's a transitory problem. However, after observing multiple failures, the service should use _exponential backoff_ and _random jitter_ to ensure that it's not hammering a service that's already in trouble, because doing so could contribute to further degradation.
+
 ### Exponential Backoff
 
+As API operations continue to fail, a service should use [exponential backoff](https://en.wikipedia.org/wiki/Exponential_backoff) by waiting an amount of time proportional to 2^_n_ before retrying them, where _n_ is the number of failures that have occurred. This helps to reduce load on the remote service to give it some breathing room to recover.
+
+After an API call succeeds, the counter is reset and normal operations can continue.
 
 ### Jitter
 
-When waiting to retry an operation, at some random jitter to the wait time. Other nodes may be waiting to retry the same operation and the added randomness will prevent everyone from doing so in lockstep, which could be dangerous for a target service.
+Exponential backoff on its own does a lot to make a platform safer, but it's also a good idea to take the idea a step further by introducing some random "jitter" to any wait times.
+
+If an abrupt problem in a service causes a large number of clients that are communicating with it to all fail close to the same instant, then even though they're practicing exponential backoff, their scheduled wait times might be close enough that each subsequent retry puts significant load on the degraded service. This is known as [the thundering herd problem](https://en.wikipedia.org/wiki/Thundering_herd_problem).
+
+An easy solution is to introduce randomness to those wait times. This causes the schedules of each client retrying to drift apart and space out the load on the degraded service, which will help contribute to its recovery.
 
 ## Pool Connections
 
