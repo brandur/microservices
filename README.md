@@ -95,7 +95,7 @@ Strongly define every service's interface and make sure that services test their
 
 ---
 
-The easiest way to break a platform is to have one service break the contract that another serivce is using to communicate with it. This can happen for a number of reasons, but a very common problem is that APIs are implicit and broken accidentally; for example, if an API call's response is a JSON blob and someone changes the type of one field from a string to an integer. Another common pitfall is that semantics around backwards compatibility aren't well understood, and an incompatible change is introduced inadvertently.
+The easiest way to break a platform is to have one service break the contract that another service is using to communicate with it. This can happen for a number of reasons, but a very common problem is that APIs are implicit and broken accidentally; for example, if an API call's response is a JSON blob and someone changes the type of one field from a string to an integer. Another common pitfall is that semantics around backwards compatibility aren't well understood, and an incompatible change is introduced inadvertently.
 
 ### API Specifications
 
@@ -122,15 +122,15 @@ Remember that although these rules are perhaps most application to RPC and RESTf
 
 A common scheme for maintaining backwards compatibility is versioning an exposed API so that multiple versions are running simultaneously and services can cut over to an updated version when they're ready to do so.
 
-In practice, versioning can sometimes be a useful technique, but tends to produce a signifcant amount of technical debt because version upgrades are very onerous and not executed in a timely manner. The result is that both the old and new API versions have to run side-by-side in production far longer than had been originally intended. Especially for internal APIs this is more operational overhead than it's worth and should be avoided.
+In practice, versioning can sometimes be a useful technique, but tends to produce a significant amount of technical debt because version upgrades are very onerous and not executed in a timely manner. The result is that both the old and new API versions have to run side-by-side in production far longer than had been originally intended. Especially for internal APIs this is more operational overhead than it's worth and should be avoided.
 
 Instead design APIs to be "rolling" so that changes are small and incremental. This has the effect of significantly reducing the upgrade effort for integrations and making them more likely to stay up to date. It also eases operational burden because only a single API version needs to be run and maintained.
 
 ### Private APIs
 
-The longer a service is in operation, the more likely it'll be that at some point an involed party will suggest that it should support a one-off experimental API or a private API for limited use by another service.
+The longer a service is in operation, the more likely it'll be that at some point an involved party will suggest that it should support a one-off experimental API or a private API for limited use by another service.
 
-Despite the best of intentions, these sorts of compromises that make it anywhere near production have a bad habit of becoming permanent and resulting in long-term operational and design debt. This isn't always a fait accompli, but is a frequent enough that is should e considered a probable result. In general, avoid introducing private and one-off APIs and instead work on integrating the necessary changes into the mainline API.
+Despite the best of intentions, these sorts of compromises that make it anywhere near production have a bad habit of becoming permanent and resulting in long-term operational and design debt. This isn't always a fait accompli, but is a frequent enough that is should be considered a probable result. In general, avoid introducing private and one-off APIs and instead work on integrating the necessary changes into the mainline API.
 
 ## Ensure Correctness With Atomicity
 
@@ -247,7 +247,7 @@ An easy solution is to introduce randomness to those wait times. This causes the
 
 ## Communicate Economically
 
-Communicate efficiency between services to keep the platform fast. Practice austerity in the total number of interservice calls made, pool connections to minimize overhead, and use efficient protcols and data transfer formats.
+Communicate efficiency between services to keep the platform fast. Practice austerity in the total number of interservice calls made, pool connections to minimize overhead, and use efficient protocols and data transfer formats.
 
 ---
 
@@ -275,7 +275,7 @@ The more consistent the technology stack and practices between all shared servic
 
 * A single protocol should be shared for all communication between services (e.g. HTTP, GRPC, ...).
 * It takes a lot of experience to learn how to operate a database well, so it's best to use a single one everywhere.
-* Standards around services for deployment, logging, reporting, metrics, and CI will significanly ease integration over the long run.
+* Standards around services for deployment, logging, reporting, metrics, and CI will significantly ease integration over the long run.
 * Standards on languages, frameworks, and even individual libraries are a good idea to reduce cognitive overhead for engineers.
 * Universal coding conventions. Use linters in CI for enforcement.
 
